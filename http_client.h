@@ -21,6 +21,8 @@
 #include "http_request.h"
 #include "http_response.h"
 
+#define DOWNLOAD_BUFFER_SIZE 4096
+#define UPLOAD_BUFFER_SIZE 4096
 
 class HttpClient
 {
