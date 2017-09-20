@@ -3,8 +3,12 @@
 
 int main(int argc, char *argv[])
 {
+<<<<<<< HEAD
     //second commit
     //master
+=======
+    //http_client2.0
+>>>>>>> http_client2.0
     if(argc != 3 && argc != 4)
     {
         std::cerr << "Usage: argument is incorrent...";
