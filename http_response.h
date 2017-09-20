@@ -10,6 +10,8 @@
 #include <cstring>
 #include <cstdio>
 
+#include "http_status.h"
+
 class HttpResponse
 {
 public:
@@ -19,7 +21,7 @@ public:
     //used by client 
     void parse_response(const std::string& response);
     std::string get_location() const;
-    int get_status_code() const;
+    HTTP_STATUS get_status_code() const;
     long long int get_content_length() const;
     
     //used by server

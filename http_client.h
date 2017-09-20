@@ -17,20 +17,14 @@
 #include <fcntl.h>
 
 #include "Socket.h"
+#include "http_status.h"
 #include "http_request.h"
 #include "http_response.h"
 
-#define DOWNLOAD_THREAD_NUM 10
-#define DOWNLOAD_BUFFER_SIZE    4096
-#define UPLOAD_BUFFER_SIZE      4096
-
-#define HTTP_RESPONSE_OK        200
-#define HTTP_RESPONSE_REDIR     302
-#define HTTP_RESPONSE_BAD       400
-#define HTTP_RESPONSE_NFOUND    404
 
 class HttpClient
 {
+
 public:
     HttpClient();
     ~HttpClient();

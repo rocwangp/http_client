@@ -1,0 +1,10 @@
+#pragma once
+
+enum HTTP_STATUS
+{
+    HTTP_STATUS_OK,
+    HTTP_STATUS_REDIR,
+    HTTP_STATUS_BAD,
+    HTTP_STATUS_NFOUND,
+    HTTP_STATUS_OTHER
+};

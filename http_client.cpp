@@ -31,7 +31,7 @@ void HttpClient::download_file(const std::string& url)
     std::string request_header = m_http_request.get_http_download_request();
     if(request_header == "")
         return;
-    std::cout << request_header << std::endl;
+
     //client(brower) try to connect to server in order to send request
     if(m_socket.Connect(m_http_request.get_ip_address(), m_http_request.get_port()) == false)
     {
@@ -39,7 +39,7 @@ void HttpClient::download_file(const std::string& url)
         m_socket.CloseSocket();
         return;
     }
-    std::cout << "connect to server successfully" << std::endl;
+   
     //client(brower) send request to server
     if(m_socket.Send(request_header) <= 0)
     {
@@ -62,7 +62,6 @@ void HttpClient::download_file(const std::string& url)
         m_socket.CloseSocket();
         return;
     }
-    std::cout << response << std::endl;
     m_http_response.parse_response(response);
 
     
@@ -72,23 +71,23 @@ void HttpClient::download_file(const std::string& url)
     //
     //when redirection, carry out download job again with a new url
     int status_code = m_http_response.get_status_code();
-    if(status_code == HTTP_RESPONSE_REDIR)
+    if(status_code == HTTP_STATUS_REDIR)
     {
         std::cerr << "redirection a new url to download" << std::endl;
         m_socket.CloseSocket();
         this->download_file(m_http_response.get_location());
         return;
     }
-    else if(status_code == HTTP_RESPONSE_BAD)
+    else if(status_code == HTTP_STATUS_BAD)
     {
         std::cerr << "resquest error : request_header is incorrent...";
         return;
     }
-    else if(status_code == HTTP_RESPONSE_NFOUND)
+    else if(status_code == HTTP_STATUS_NFOUND)
     {
         std::cerr << "request error : the source not exist...";
     }
-    else if(status_code == HTTP_RESPONSE_OK)
+    else if(status_code == HTTP_STATUS_OK)
     {
         //open a new thread to treat the download job 
         //and the process wait other command 
@@ -96,7 +95,7 @@ void HttpClient::download_file(const std::string& url)
         pthread_create(&tid, NULL, HttpClient::process_download, this);
         pthread_join(tid, NULL);
     }
-    else
+    else if(status_code == HTTP_STATUS_OTHER)
     {
         std::cerr << "request error : unknown error...";
     }
@@ -143,7 +142,7 @@ void *HttpClient::process_download(void *arg)
         //this solution is same with upload file and server receive file 
         //
 
-        int ret = recv(http_client->m_socket.GetSocket(), buffer,DOWNLOAD_BUFFER_SIZE, 0);
+        int ret = recv(http_client->m_socket.GetSocket(), buffer, sizeof(buffer), 0);
       
         if(ret < 0)
         {
@@ -157,7 +156,6 @@ void *HttpClient::process_download(void *arg)
         }
         else
         {
-            //out.write(buffer, ret);
             out.write(buffer, ret);
             downloaded_size += ret;
             HttpClient::show_process_bar(downloaded_size, filesize);
@@ -213,7 +211,6 @@ void HttpClient::upload_file(const std::string& url, const std::string& filename
     m_socket.CreateSocket();
     m_http_request.parse_url(url);
     
-    std::cout << m_http_request.get_ip_address() << " " << m_http_request.get_port() << std::endl;
     if(m_socket.Connect(m_http_request.get_ip_address(), m_http_request.get_port()) == false)
     {
         std::cerr << "connect to server error..." << std::endl;
@@ -236,7 +233,6 @@ void HttpClient::upload_file(const std::string& url, const std::string& filename
         m_socket.CloseSocket();
         return;
     }
-    std::cout << request_header << std::endl;
 
     pthread_t tid;
     pthread_create(&tid, NULL, HttpClient::process_upload, this);

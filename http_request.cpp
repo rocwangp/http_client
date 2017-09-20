@@ -191,32 +191,18 @@ std::string HttpRequest::get_http_upload_tail()
 
 
 ////////////////////////////server//////////////////////////////
-std::string HttpRequest::get_method() const
-{
-    return m_method;
-}
 
-std::string HttpRequest::get_argument() const
-{
-    return m_argument;
-}
-
-long long int HttpRequest::get_content_length() const
-{
-    return m_content_length;
-}
-
-bool HttpRequest::is_upload() const
-{
-    return m_upload;
-}
-
+//server parse client's request, contain 
+//method(GET/POST...), 
+//the filename client try to access 
+//and argument if submit
 void HttpRequest::parse_request(const std::string& request)
 {
     parse_method(request);
     parse_filename_argument(request);
 }
 
+//methos at the header 
 void HttpRequest::parse_method(const std::string& request)
 {
     std::string::size_type front_idx = 0;
@@ -234,6 +220,9 @@ void HttpRequest::parse_content_length(const std::string& request)
     sscanf(filesize_string.c_str(), "%lld", &m_content_length);
 }
 
+//if method is GET, only need to parse the filename client try to access
+//if method is POST, also need to parse filename, but if is submit, also need to parse argument
+//but if upload , need parse filename and content_length;
 void HttpRequest::parse_filename_argument(const std::string& request)
 {
     if(m_method == "GET")
@@ -277,4 +266,23 @@ void HttpRequest::parse_post_filename_argument(const std::string& request)
     }
 }
 
+std::string HttpRequest::get_method() const
+{
+    return m_method;
+}
+
+std::string HttpRequest::get_argument() const
+{
+    return m_argument;
+}
+
+long long int HttpRequest::get_content_length() const
+{
+    return m_content_length;
+}
+
+bool HttpRequest::is_upload() const
+{
+    return m_upload;
+}
 

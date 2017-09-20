@@ -81,9 +81,18 @@ void HttpResponse::parse_content_length(const std::string& response)
 }
 
 
-int HttpResponse::get_status_code() const
+HTTP_STATUS HttpResponse::get_status_code() const
 {
-    return m_status_code;
+    if(m_status_code == 200)
+        return HTTP_STATUS_OK;
+    else if(m_status_code == 302)
+        return HTTP_STATUS_REDIR;
+    else if(m_status_code == 400)
+        return HTTP_STATUS_BAD;
+    else if(m_status_code == 404)
+        return HTTP_STATUS_NFOUND;
+    else
+        return HTTP_STATUS_OTHER;
 }
 
 std::string HttpResponse::get_location() const
