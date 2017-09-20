@@ -4,6 +4,7 @@
 int main(int argc, char *argv[])
 {
     //second commit
+    //master
     if(argc != 3 && argc != 4)
     {
         std::cerr << "Usage: argument is incorrent...";
